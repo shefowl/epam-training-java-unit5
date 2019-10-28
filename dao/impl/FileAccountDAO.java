@@ -26,10 +26,12 @@ public class FileAccountDAO implements AccountDAO {
             FileWriter fileWriter = new FileWriter("accounts.txt", true);
             String data = account.getId() + " " + account.getBalance() + "\n";
             fileWriter.write(data);
-            fileWriter.close();
         }
         catch (IOException e){
             throw new DAOException(e);
+        }
+        finally{
+            fileWritter.close();
         }
     }
 
@@ -44,11 +46,14 @@ public class FileAccountDAO implements AccountDAO {
                    return new Account(id, Float.parseFloat(line.substring(line.indexOf(space) + 1)));
                 }
             }
-            reader.close();
             return null;
         }
         catch (IOException e){
             throw new DAOException(e);
+        }
+        finally{
+            reader.close();
+            fileWritter.close();
         }
     }
 
@@ -70,14 +75,16 @@ public class FileAccountDAO implements AccountDAO {
                 fileWriter.write(line + "\n");
             }
 
-            reader.close();
-            fileWriter.close();
             File oldFile = new File("accounts.txt");
             if (oldFile.delete()) {
                 temp.renameTo(oldFile);
             }
         }catch (IOException e){
             throw new DAOException(e);
+        }
+        finally{
+            reader.close();
+            fileWritter.close();
         }
     }
 
@@ -96,8 +103,6 @@ public class FileAccountDAO implements AccountDAO {
                 }
                 fileWriter.write(line + "\n");
             }
-            reader.close();
-            fileWriter.close();
 
             File oldFile = new File("accounts.txt");
             if (oldFile.delete()) {
@@ -105,6 +110,10 @@ public class FileAccountDAO implements AccountDAO {
             }
         }catch (IOException e){
             throw new DAOException(e);
+        }
+        finally{
+            reader.close();
+            fileWritter.close();
         }
     }
 
